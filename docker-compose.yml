@@ -1,0 +1,36 @@
+services:
+  api_gateway:
+    build: ./http-api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./http-api-gateway/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3000
+
+  users-microservice:
+    build: ./users-microservice
+    volumes:
+      - ./users-microservice/src:/usr/src/app/src
+    command: npm run start:dev
+
+  payments-microservice:
+    build: ./payments-microservice
+    volumes:
+      - ./payments-microservice/src:/usr/src/app/src
+    command: npm run start:dev
+
+  nats:
+    image: nats
+    ports:
+      - "4222:4222"
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass123
+      POSTGRES_DB: nestjs-db
+    ports:
+      - "5432:5432"
